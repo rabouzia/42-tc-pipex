@@ -6,13 +6,13 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/08 19:21:45 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/09 22:02:33 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	cmd_exec(char **av, char **env)
+void	cmd_exec_1(char **av, char **env)
 {
 	char	**res;
 	int		i;
@@ -23,7 +23,7 @@ void	cmd_exec(char **av, char **env)
 
 	res = ft_split(env[12], ':');
 	res[0] = ft_substr(res[0], 5, 22);
-	cmd_args = ft_split(av[1], ' ');
+	cmd_args = ft_split(av[2], ' ');
 	acc = 0;
 	i = 0;
 	while (res[i])
