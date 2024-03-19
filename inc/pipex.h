@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:25 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/09 23:08:34 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/15 10:47:23 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_cmd
 {
 	int	fd_in;
 	int	fd_out;
+	int	pid;
 
 }		t_cmd;
 
@@ -35,11 +36,13 @@ char	*ft_substr(char *s, int start, int len);
 
 //---------------- pipexu --------------------
 void	cmd_exec_1(char **av, char **env);
+void	cmd_exec_2(char **av, char **env);
 
 //---------------- mini_libft_dump -------------
 char	*empty(void);
 char	*get_next_word(char *str, int *ptr, char c);
 int		count_words(char *str, char c);
 int		ft_strlcpy(char *dst, char *src, int size);
+void	warp_pipe(char **av, char **env, int fd1, int);
 
 #endif

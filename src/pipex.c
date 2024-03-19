@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:21 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/09 23:36:44 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/18 14:11:19 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 int	main(int ac, char **av, char **env)
 {
+	// t_cmd *exec;
 	(void)ac;
-
-	int pid;
-	pid = fork();
-
-	int fd = open(av[1], O_RDONLY, 0644);
-	dup2(fd, 0);
-	cmd_exec_1(av, env);
-	close(1);
-	return (0);
+	if (ac != 5 || !env || !*env)
+		return (0);
+	if (ac == 1)
+		perror("arg");
+	warp_pipe(av, env, 1, 4);
 }
+
+// gnl(0) pour les bonus
