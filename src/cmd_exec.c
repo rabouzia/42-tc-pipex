@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/21 10:48:46 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/25 22:37:21 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	cmd_exec(char **env, char *avn)
 	exit(0);
 }
 
-void	child_process(char **env, int fde, int fd, char *av, int bool, int bool2)
+void	child_process(char **env, int fde, int fd, char *av, int bool,
+		int bool2)
 {
 	dup2(fde, bool);
 	close(fde);
@@ -57,7 +58,9 @@ void	warp_pipe(char **av, char **env, int fd1, int fd2)
 {
 	int	fd[2];
 	int	pid;
+	int	pid2;
 	int	fde;
+	//int	status;
 
 	if (pipe(fd) == -1)
 		perror("pipe error");
@@ -66,18 +69,24 @@ void	warp_pipe(char **av, char **env, int fd1, int fd2)
 		perror("fork");
 	if (pid == 0)
 	{
-	close(fd[0]); // fd utiliser chez le parent donc inutile pour lenfant
-	fde = open(av[fd1], O_RDONLY, 0644);
-	if (!fde)
-		return ;
-	child_process(env, fde, fd[1], av[2], 0, 1);
+		close(fd[0]); // fd utiliser chez le parent donc inutile pour lenfant
+		fde = open(av[fd1], O_RDONLY, 0644);
+		if (!fde)
+			return ;
+		child_process(env, fde, fd[1], av[2], 0, 1);
+		exit(1);
 	}
-	else
+	pid2 = fork();
+	if (pid2 == -1)
+		perror("fork");
+	if (pid2 == 0)
 	{
-	close(fd[1]); // fd utiliser chez lenfant donc inutile pour le parent
-	fde = open(av[fd2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (!fde)
-		return ;
-	child_process(env, fde, fd[0], av[3], 1 ,0);
+		close(fd[1]); // fd utiliser chez lenfant donc inutile pour le parent
+		fde = open(av[fd2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (!fde)
+			return ;
+		child_process(env, fde, fd[0], av[3], 1, 0);
 	}
+	// waitpid(pid, &status, 0);
+	// waitpid(pid2, &status, 0);
 }
