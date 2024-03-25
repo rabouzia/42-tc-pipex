@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/19 22:53:46 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/21 10:48:46 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@ void	cmd_exec(char **env, char *avn)
 	char	**cmd_args;
 	char	*tmp2;
 	char	*result;
+
 	result = NULL;
 	i = 0;
 	res = NULL;
-	while(env[i] && strncmp(env[i], "PATH=", 5) != 0)
+	while (env[i] && strncmp(env[i], "PATH=", 5) != 0)
 		i++;
 	if (env[i])
 		res = ft_split(env[i], ':');
-	cmd_args = ft_split(avn, ' '); //av[3] pour le 2
+	cmd_args = ft_split(avn, ' '); // av[3] pour le 2
 	i = 0;
 	while (res[i])
 	{
@@ -43,6 +44,15 @@ void	cmd_exec(char **env, char *avn)
 	exit(0);
 }
 
+void	child_process(char **env, int fde, int fd, char *av, int bool, int bool2)
+{
+	dup2(fde, bool);
+	close(fde);
+	dup2(fd, bool2);
+	close(fd);
+	cmd_exec(env, av);
+}
+
 void	warp_pipe(char **av, char **env, int fd1, int fd2)
 {
 	int	fd[2];
@@ -56,28 +66,18 @@ void	warp_pipe(char **av, char **env, int fd1, int fd2)
 		perror("fork");
 	if (pid == 0)
 	{
-		fde = 0;
-		close(fd[0]); // fd utiliser chez le parent donc inutile pour lenfant
-		fde = open(av[fd1], O_RDONLY, 0644);
-		if (!fde)
-			return ;
-		dup2(fde, 0);
-		close(fde);
-		dup2(fd[1], 1);
-		close(fd[1]);
-		cmd_exec(env, av[2]);
+	close(fd[0]); // fd utiliser chez le parent donc inutile pour lenfant
+	fde = open(av[fd1], O_RDONLY, 0644);
+	if (!fde)
+		return ;
+	child_process(env, fde, fd[1], av[2], 0, 1);
 	}
 	else
 	{
-		fde = 0;
-		close(fd[1]); // fd utiliser chez lenfant donc inutile pour le parent
-		fde = open(av[fd2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (!fde)
-			return ;
-		dup2(fde, 1);
-		close(fde);
-		dup2(fd[0], 0);
-		close(fd[0]);
-		cmd_exec(env, av[3]);
+	close(fd[1]); // fd utiliser chez lenfant donc inutile pour le parent
+	fde = open(av[fd2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (!fde)
+		return ;
+	child_process(env, fde, fd[0], av[3], 1 ,0);
 	}
 }
