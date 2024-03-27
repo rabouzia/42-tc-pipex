@@ -1,2 +1,0 @@
-USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-rabouzia   24507  0.0  0.0      0     0 pts/0    Z+   22:01   0:00 [pipex] <defunct>

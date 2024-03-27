@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:25 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/19 22:52:26 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:29:16 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,15 @@ int		ft_strlen(char *str);
 char	*ft_substr(char *s, int start, int len);
 
 //---------------- pipexu --------------------
-void	cmd_exec_1(char **av, char **env);
-void	cmd_exec_2(char **av, char **env);
+void	excute(char **cmd, char **env);
+
+char	**cmd_get(char *cmd);
 
 //---------------- mini_libft_dump -------------
 char	*empty(void);
 char	*get_next_word(char *str, int *ptr, char c);
 int		count_words(char *str, char c);
 int		ft_strlcpy(char *dst, char *src, int size);
-void	warp_pipe(char **av, char **env, int fd1, int);
+void	warp_pipe(char **av, char **env);
 
 #endif

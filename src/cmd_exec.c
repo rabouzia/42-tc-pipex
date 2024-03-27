@@ -3,90 +3,186 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/25 22:37:21 by rabouzia         ###   ########.fr       */
+/*   Updated: 2024/03/27 18:02:19 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	cmd_exec(char **env, char *avn)
+
+char	*ft_strdup(const char *src)
 {
-	char	**res;
+	int		size_src;
 	int		i;
-	char	**cmd_args;
-	char	*tmp2;
+	char	*cpy;
+
+	i = 0;
+	size_src = ft_strlen((char *)src);
+	cpy = malloc((size_src + 1) * sizeof(char));
+	if (cpy == 0)
+		return (0);
+	while (src[i])
+	{
+		cpy[i] = src[i];
+		i++;
+	}
+	cpy[i] = '\0';
+	return (cpy);
+}
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while ((s1[i] || s2[i]) && (i < n))
+	{
+		if ((unsigned char)(s1[i]) > (unsigned char)(s2[i]))
+			return (1);
+		if ((unsigned char)(s1[i]) < (unsigned char)(s2[i]))
+			return (-1);
+		i++;
+	}
+	return (0);
+}
+
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	write(fd, s, ft_strlen(s));
+}
+void	ft_putendl_fd(char *s, int fd)
+{
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+char	*ft_strchr(const char *s, int c)
+{
+	char	*str;
+
+	str = (char *)s;
+	while (*str != c)
+	{
+		if (*str == '\0')
+		{
+			return (NULL);
+		}
+		str++;
+	}
+	return (str);
+}
+
+void	error_msg(char *path, char **cmd)
+{
+	if (!path && ft_strchr(cmd[0], '/') != NULL)
+		ft_putstr_fd("No such file or directory : ", 2);
+	else if (!path)
+		ft_putstr_fd("command not found: ", 2);
+	else if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
+	{
+		ft_putstr_fd("Permission denied: ", 2);
+		ft_putendl_fd(cmd[0], 2);
+		free_split(cmd);
+		free(path);
+		exit(126);
+	}
+	if (path)
+		free(path);
+	ft_putendl_fd(cmd[0], 2);
+	free_split(cmd);
+	exit(127);
+}
+
+char	**cmd_get(char *cmd)
+{
+	char	**split_cmd;
+
+	split_cmd = ft_split(cmd, ' '); // av[3] pour le 2
+	if (!split_cmd || !split_cmd[0])
+	{
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putendl_fd(cmd, 2);
+		free(split_cmd);
+		exit(127);
+	}
+	return (split_cmd);
+}
+
+char	*cmd_finder(char **cmd, char **env)
+{
+	int		i;
+	char	*tmp;
 	char	*result;
+	char	*slash;
 
 	result = NULL;
+	slash = ft_strjoin("/", cmd[0]);
+	if (!slash)
+		return (NULL);
 	i = 0;
-	res = NULL;
-	while (env[i] && strncmp(env[i], "PATH=", 5) != 0)
+	while (env[i])
+	{
+		tmp = ft_strjoin(env[i], slash);
+		if (!tmp)
+			return (free(slash),NULL); // free(slash)
+		if (access(tmp, F_OK) == 0)
+		{
+			result = ft_strdup(tmp);
+			if (!result)
+				return (NULL);
+		}
+		free(tmp);
 		i++;
-	if (env[i])
-		res = ft_split(env[i], ':');
-	cmd_args = ft_split(avn, ' '); // av[3] pour le 2
+	}
+	return (free_split(env), free(slash),result);
+}
+
+
+
+void	excute(char **cmd, char **env)
+{
+	int		i;
+	char	*path;
+	char	**tmp_path;
+
+	tmp_path = NULL;
+	path = NULL;
 	i = 0;
-	while (res[i])
+	if (access(cmd[0], F_OK) == 0)
+		path = ft_strdup(cmd[0]);
+	else if (env[i])
 	{
-		tmp2 = ft_strjoin(res[i], "/");
-		result = ft_strjoin(tmp2, cmd_args[0]); // possible leak
-		if (access(result, F_OK) == 0)
-			break ;
-		free(result);
-		free(tmp2);
-		i++;
+		while (env[i] && ft_strncmp(env[i], "PATH=", 5) != 0)
+			i++;
+		if (env[i])
+			tmp_path = ft_split(&env[i][5], ':');
+		if (!tmp_path)
+			error_msg(path, cmd);
+		path = cmd_finder(cmd, tmp_path);
 	}
-	if (execve(result, cmd_args, env) == -1)
-		perror("error is");
-	exit(0);
+	if (!path)
+		error_msg(path, cmd);
+	execve(path, cmd, env);
+	error_msg(path, cmd);
 }
 
-void	child_process(char **env, int fde, int fd, char *av, int bool,
-		int bool2)
-{
-	dup2(fde, bool);
-	close(fde);
-	dup2(fd, bool2);
-	close(fd);
-	cmd_exec(env, av);
-}
-
-void	warp_pipe(char **av, char **env, int fd1, int fd2)
-{
-	int	fd[2];
-	int	pid;
-	int	pid2;
-	int	fde;
-	//int	status;
-
-	if (pipe(fd) == -1)
-		perror("pipe error");
-	pid = fork();
-	if (pid == -1)
-		perror("fork");
-	if (pid == 0)
-	{
-		close(fd[0]); // fd utiliser chez le parent donc inutile pour lenfant
-		fde = open(av[fd1], O_RDONLY, 0644);
-		if (!fde)
-			return ;
-		child_process(env, fde, fd[1], av[2], 0, 1);
-		exit(1);
-	}
-	pid2 = fork();
-	if (pid2 == -1)
-		perror("fork");
-	if (pid2 == 0)
-	{
-		close(fd[1]); // fd utiliser chez lenfant donc inutile pour le parent
-		fde = open(av[fd2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (!fde)
-			return ;
-		child_process(env, fde, fd[0], av[3], 1, 0);
-	}
-	// waitpid(pid, &status, 0);
-	// waitpid(pid2, &status, 0);
-}
