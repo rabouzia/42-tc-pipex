@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:21 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/27 17:53:34 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/27 18:40:18 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	child1(int fd[2], char **av, char **env)
 		close(fd[0]);
 		exit(EXIT_FAILURE);
 	}
-	close(fd[1]);
+	close(fd[0]);
 	excute(cmd_get(av[3]), env);
 }
 
@@ -109,3 +109,4 @@ int	main(int ac, char **av, char **env)
 }
 
 // gnl(0) pour les bonus
+// valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --leak-resolution=high --trace-children=yes
