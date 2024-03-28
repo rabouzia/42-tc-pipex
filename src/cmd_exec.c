@@ -6,63 +6,12 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/27 18:02:19 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/28 15:04:17 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-
-char	*ft_strdup(const char *src)
-{
-	int		size_src;
-	int		i;
-	char	*cpy;
-
-	i = 0;
-	size_src = ft_strlen((char *)src);
-	cpy = malloc((size_src + 1) * sizeof(char));
-	if (cpy == 0)
-		return (0);
-	while (src[i])
-	{
-		cpy[i] = src[i];
-		i++;
-	}
-	cpy[i] = '\0';
-	return (cpy);
-}
-
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while ((s1[i] || s2[i]) && (i < n))
-	{
-		if ((unsigned char)(s1[i]) > (unsigned char)(s2[i]))
-			return (1);
-		if ((unsigned char)(s1[i]) < (unsigned char)(s2[i]))
-			return (-1);
-		i++;
-	}
-	return (0);
-}
-
-void	ft_putchar_fd(char c, int fd)
-{
-	write(fd, &c, 1);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	write(fd, s, ft_strlen(s));
-}
-void	ft_putendl_fd(char *s, int fd)
-{
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
-}
 
 void	free_split(char **split)
 {
@@ -113,21 +62,6 @@ void	error_msg(char *path, char **cmd)
 	exit(127);
 }
 
-char	**cmd_get(char *cmd)
-{
-	char	**split_cmd;
-
-	split_cmd = ft_split(cmd, ' '); // av[3] pour le 2
-	if (!split_cmd || !split_cmd[0])
-	{
-		ft_putstr_fd("Command not found: ", 2);
-		ft_putendl_fd(cmd, 2);
-		free(split_cmd);
-		exit(127);
-	}
-	return (split_cmd);
-}
-
 char	*cmd_finder(char **cmd, char **env)
 {
 	int		i;
@@ -149,7 +83,7 @@ char	*cmd_finder(char **cmd, char **env)
 		{
 			result = ft_strdup(tmp);
 			if (!result)
-				return (NULL);
+				return (free(tmp),NULL);
 		}
 		free(tmp);
 		i++;

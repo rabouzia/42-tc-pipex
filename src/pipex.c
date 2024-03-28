@@ -6,11 +6,27 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:21 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/27 17:53:34 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/03/28 15:04:34 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+char	**cmd_get(char *cmd)
+{
+	char	**split_cmd;
+
+	split_cmd = ft_split(cmd, ' '); // av[3] pour le 2
+	if (!split_cmd || !split_cmd[0])
+	{
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putendl_fd(cmd, 2);
+		free(split_cmd);
+		exit(127);
+	}
+	return (split_cmd);
+}
+
 
 static void	child0(int fd[2], char **av, char **env)
 {
