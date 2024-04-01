@@ -1,10 +1,12 @@
 SRC	  =		src/pipex.c					\
 			src/mini_libft.c 			\
+			src/mini_libft2.c 		\
 			src/mini_libft_dump.c		\
 			src/cmd_exec.c				\
 
 BONUS =		bonus/pipex.c				\
 			bonus/mini_libft.c 			\
+			bonus/mini_libft2.c 		\
 			bonus/mini_libft_dump.c		\
 			bonus/cmd_exec.c			\
 	

@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/28 15:04:17 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/01 15:01:07 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,3 @@ void	excute(char **cmd, char **env)
 	execve(path, cmd, env);
 	error_msg(path, cmd);
 }
-
