@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:25 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/04 15:36:28 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/04 17:52:21 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,26 @@ typedef struct s_cmd
 {
 	int	fd_in;
 	int	fd_out;
-	int	pid;
-	
+	int	id;
+	char *cmd;
 }		t_cmd;
 
+// in->cmd->pipe_w->oldfd->cmd->pipe_w->pipe_r->cmd->out
+
+// in->cmd->pipe_w->oldfd->cmd->pipe_w->oldfd->cmd->pipe_w->oldfd->cmd->pipe_w->pipe_r->cmd->out
+
+typedef struct s_pipe
+{
+	int	fd_in;
+	int	fd_out;
+	int pipe[2];
+	int	oldfd;
+	char **env;
+	char **av;
+	int flag;
+	int ac;
+	int	i;
+}	t_pipe;
 
 //---------------- pipexu --------------------
 void	ft_putstr_fd(char *s, int fd);
@@ -36,9 +52,9 @@ void	excute(char **cmd, char **env);
 void	error_msg(char *path, char **cmd);
 
 //---------------- pipex_bonus -------------
-void child_loop(int c_fd,int pipe_fd[2], char *av, char **env);
-int	ac_loop(char **av, char **env, int ac, int pipe_fd[2]);
-int	flag_out(int flag);
+void 	child_loop(t_pipe *pipex);
+int		ac_loop(t_pipe *pipex);
+int		flag_out(t_pipe *pipex);
 char	**cmd_get(char *cmd);
 
 
