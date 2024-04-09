@@ -5,7 +5,7 @@ SRC	  =		src/pipex.c						\
 			mini_libft/mini_libft2.c		\
 
 BONUS =		bonus/pipex.c					\
-			bonus/bonus.c				\
+			bonus/bonus.c					\
 			mini_libft/mini_libft.c 		\
 			mini_libft/mini_libft1.c 		\
 			mini_libft/mini_libft2.c		\
@@ -15,7 +15,8 @@ BONUS =		bonus/pipex.c					\
 
 
 NAME =		pipex
-NAME_BONUS =		pipex_bonus
+
+NAME_BONUS =	pipex_bonus
 
 CFLAGS =	-Wall -Werror -Wextra -g3 -I./inc
 
@@ -38,9 +39,12 @@ $(NAME_BONUS): $(OBJ_BONUS)
 
 clean:
 		rm -f $(OBJ)
+		rm -f $(OBJ_BONUS)
+
 
 fclean: clean
 		rm -f $(NAME)
+		rm -f $(NAME_BONUS	)
 
 bonus: $(NAME_BONUS)
 

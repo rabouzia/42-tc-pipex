@@ -6,7 +6,7 @@
 /*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:21 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/04 18:00:13 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/08 01:15:21 by ramzerk          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,31 +59,31 @@ void child_loop(t_pipe *pipex)
 	excute(cmd_get(pipex->av[pipex->i]), pipex->env);
 }
 
-static void	child_n2(t_pipe *pipex)
+static void	child_n2(t_pipe *p)
 {
-	close(pipex->pipe[1]);
-	pipex->fd_out = open(pipex->av[1], flag_out(pipex), 0644);
-	if (pipex->fd_out == -1)
+	close(p->pipe[1]);
+	p->fd_out = open(p->av[p->ac - 1], flag_out(p), 0644);
+	if (p->fd_out == -1)
 	{
-		perror(pipex->av[1]);
-		close(pipex->pipe[0]);
+		perror(p->av[1]);
+		close(p->pipe[0]);
 		exit(EXIT_FAILURE);
 	}
-	if (dup2(pipex->fd_out, STDOUT_FILENO) == -1)
+	if (dup2(p->fd_out, STDOUT_FILENO) == -1)
 	{
-		perror("child_out:dup2(pipex->fd_out)");
-		close(pipex->fd_out);
+		perror("child_out:dup2(p->fd_out)");
+		close(p->fd_out);
 		exit(EXIT_FAILURE);
 	}
-	close(pipex->fd_out);
-	if (dup2(pipex->pipe[0], STDIN_FILENO) == -1)
+	close(p->fd_out);
+	if (dup2(p->pipe[0], STDIN_FILENO) == -1)
 	{
-		perror("child_out:dup2(pipex->pipe[0])");
-		close(pipex->pipe[0]);
+		perror("child_out:dup2(p->pipe[0])");
+		close(p->pipe[0]);
 		exit(EXIT_FAILURE);
 	}
-	close(pipex->pipe[0]);
-	excute(cmd_get(pipex->av[0]), pipex->env);
+	close(p->pipe[0]);
+	excute(cmd_get(p->av[p->ac - 2]), p->env);
 }
 
 
@@ -118,11 +118,10 @@ int	main(int ac, char **av, char **env)
 	pipex.env = env;
 	pipex.ac = ac;
 	pipex.flag = 0;
-	if ((pipex.ac < 5) //||(ft_strncmp(av[1], "here_doc", 8) == 0 && ac < 6))
-		|| pipe(pipex.pipe) == -1)
+	if ((pipex.ac < 5) || pipe(pipex.pipe) == -1 || (ft_strncmp(av[1], "here_doc", 8) == 0 && ac < 6))
 		return (1);
-	// if (ft_strncmp(av[1], "here_doc", 8) == 0)
-	// 	flag = here_doc(av);
+	if (ft_strncmp(av[1], "here_doc", 8) == 0)
+		flag = here_doc(av);
 	pid = fork();
 	if (pid == -1)
 		return (close(pipex.pipe[0]), close(pipex.pipe[1]), -1);
