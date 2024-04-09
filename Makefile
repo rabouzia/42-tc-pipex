@@ -3,13 +3,20 @@ SRC	  =		src/pipex.c						\
 			mini_libft/mini_libft.c 		\
 			mini_libft/mini_libft1.c 		\
 			mini_libft/mini_libft2.c		\
+			gnl/get_next_line_utils.c 		\
+
+
 
 BONUS =		bonus/pipex.c					\
 			bonus/bonus.c					\
+			bonus/fork.c					\
 			mini_libft/mini_libft.c 		\
 			mini_libft/mini_libft1.c 		\
 			mini_libft/mini_libft2.c		\
 			src/cmd_exec.c					\
+			gnl/get_next_line.c 			\
+			gnl/get_next_line_utils.c 		\
+			
 
 	
 

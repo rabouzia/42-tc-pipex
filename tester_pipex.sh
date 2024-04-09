@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # bonus info config (CHANGE HERE if your bonus exec/rule is not 'pipex')
-pipex_bonus=pipex
-rule_bonus=pipex
+pipex_bonus=pipex_bonus
+rule_bonus=pipex_bonus
 
 # const
 vlgppx='/usr/bin/valgrind --trace-children=yes --leak-check=full --track-fds=yes'

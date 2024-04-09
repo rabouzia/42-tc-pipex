@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mini_libft_dump.c                                  :+:      :+:    :+:   */
+/*   mini_libft1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 18:09:19 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/08 18:16:34 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/09 16:35:20 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,6 @@ char	*empty(void)
 		return (NULL);
 	err[0] = 0;
 	return (err);
-}
-
-int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
 }
 
 int	count_words(char *str, char c)
@@ -59,9 +49,9 @@ int	count_words(char *str, char c)
 
 char	*get_next_word(char *str, int *ptr, char c)
 {
-	int i;
-	int len_word;
-	char *word;
+	int		i;
+	int		len_word;
+	char	*word;
 
 	i = 0;
 	len_word = 0;

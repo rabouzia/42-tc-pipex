@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:21 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/04 17:23:37 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/09 16:34:29 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	**cmd_get(char *cmd)
 {
 	char	**split_cmd;
 
-	split_cmd = ft_split(cmd, ' '); // av[3] pour le 2
+	split_cmd = ft_split(cmd, ' ');
 	if (!split_cmd || !split_cmd[0])
 	{
 		ft_putstr_fd("Command not found: ", 2);
@@ -27,12 +27,11 @@ char	**cmd_get(char *cmd)
 	return (split_cmd);
 }
 
-
 static void	child0(int fd[2], char **av, char **env)
 {
 	int	fd_in;
 
-	close(fd[0]); // fd utiliser chez le parent donc inutile pour lenfant
+	close(fd[0]);
 	fd_in = open(av[1], O_RDONLY, 0644);
 	if (fd_in == -1)
 	{
@@ -59,7 +58,7 @@ static void	child1(int fd[2], char **av, char **env)
 {
 	int	fd_out;
 
-	close(fd[1]); // fd utiliser chez lenfant donc inutile pour le parent
+	close(fd[1]);
 	fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 	{
@@ -78,7 +77,7 @@ static void	child1(int fd[2], char **av, char **env)
 		close(fd[0]);
 		exit(EXIT_FAILURE);
 	}
-	close(fd[1]);
+	close(fd[0]);
 	excute(cmd_get(av[3]), env);
 }
 
@@ -123,5 +122,3 @@ int	main(int ac, char **av, char **env)
 	close(pipe_fd[1]);
 	return (wait_for_child(pid));
 }
-
-// gnl(0) pour les bonus

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/01 15:01:07 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/09 16:58:30 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	free_split(char **split)
 {
@@ -25,25 +24,25 @@ void	free_split(char **split)
 	}
 	free(split);
 }
-char	*ft_strchr(const char *s, int c)
-{
-	char	*str;
+// char	*ft_strchr(const char *s, int c)
+// {
+// 	char	*str;
 
-	str = (char *)s;
-	while (*str != c)
-	{
-		if (*str == '\0')
-		{
-			return (NULL);
-		}
-		str++;
-	}
-	return (str);
-}
+// 	str = (char *)s;
+// 	while (*str != c)
+// 	{
+// 		if (*str == '\0')
+// 		{
+// 			return (NULL);
+// 		}
+// 		str++;
+// 	}
+// 	return (str);
+// }
 
 void	error_msg(char *path, char **cmd)
 {
-	if (!path && ft_strchr(cmd[0], '/') != NULL)
+	if (!path && ft_strchr(cmd[0], '/') != 0)
 		ft_putstr_fd("No such file or directory : ", 2);
 	else if (!path)
 		ft_putstr_fd("command not found: ", 2);
@@ -78,20 +77,18 @@ char	*cmd_finder(char **cmd, char **env)
 	{
 		tmp = ft_strjoin(env[i], slash);
 		if (!tmp)
-			return (free(slash),NULL); // free(slash)
+			return (free(slash), NULL);
 		if (access(tmp, F_OK) == 0)
 		{
 			result = ft_strdup(tmp);
 			if (!result)
-				return (free(tmp),NULL);
+				return (free(tmp), NULL);
 		}
 		free(tmp);
 		i++;
 	}
-	return (free_split(env), free(slash),result);
+	return (free_split(env), free(slash), result);
 }
-
-
 
 void	excute(char **cmd, char **env)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_libft.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:42:24 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/09 19:55:22 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/09 16:35:11 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	res[i] = 0;
 	return (res);
 }
+
 char	*ft_substr(char *s, int start, int len)
 {
 	char	*res;

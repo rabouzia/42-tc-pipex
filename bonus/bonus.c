@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 15:49:08 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/07 14:20:42 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/09 17:02:45 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	**cmd_get(char *cmd)
 {
 	char	**split_cmd;
 
-	split_cmd = ft_split(cmd, ' '); // av[3] pour le 2
+	split_cmd = ft_split(cmd, ' ');
 	if (!split_cmd || !split_cmd[0])
 	{
 		ft_putstr_fd("Command not found: ", 2);
@@ -25,6 +25,26 @@ char	**cmd_get(char *cmd)
 		exit(127);
 	}
 	return (split_cmd);
+}
+
+static void	child_loop(t_pipe *pipex)
+{
+	close(pipex->pipe[0]);
+	if (dup2(pipex->oldfd, STDIN_FILENO) == -1)
+	{
+		perror("child_loop:dup2(pipex->oldfd)");
+		close(pipex->oldfd);
+		exit(EXIT_FAILURE);
+	}
+	close(pipex->oldfd);
+	if (dup2(pipex->pipe[1], STDOUT_FILENO) == -1)
+	{
+		perror("child_loop:dup2(pipex->pipe[1])");
+		close(pipex->pipe[1]);
+		exit(EXIT_FAILURE);
+	}
+	close(pipex->pipe[1]);
+	excute(cmd_get(pipex->av[pipex->i]), pipex->env);
 }
 
 int	flag_out(t_pipe *pipex)
@@ -47,7 +67,8 @@ int	ac_loop(t_pipe *pipex)
 			return (close(pipex->oldfd), -1);
 		pid = fork();
 		if (pid == -1)
-			return (close(pipex->pipe[0]), close(pipex->oldfd), close(pipex->pipe[1]), -1);
+			return (close(pipex->pipe[0]), close(pipex->oldfd),
+				close(pipex->pipe[1]), -1);
 		if (pid == 0)
 			child_loop(pipex);
 		close(pipex->pipe[1]);
@@ -80,26 +101,4 @@ void	loop_here_doc(char *tmp, t_pipe *p, int fd)
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
-}
-
-int	here_doc(t_pipe *p)
-{
-	int		fd;
-	char	*tmp;
-
-	fd = open(p->av[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		perror(p->av[1]);
-		exit(1);
-	}
-	tmp = ft_strjoin(p->av[2], "\n");
-	if (!tmp)
-	{
-		perror("here_doc:ft_strjoin:tmp");
-		close(fd);
-		exit(1);
-	}
-	loop_here_doc(tmp, p->av, fd);
-	return (free(tmp), close(fd), 1);
 }

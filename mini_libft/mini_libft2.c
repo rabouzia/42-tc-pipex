@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   mini_libft2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramzerk <ramzerk@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 15:03:01 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/03/28 15:03:26 by ramzerk          ###   ########.fr       */
+/*   Updated: 2024/04/09 16:35:32 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*ft_strdup(const char *src)
-{
-	int		size_src;
-	int		i;
-	char	*cpy;
+// char	*ft_strdup(const char *src)
+// {
+// 	int		size_src;
+// 	int		i;
+// 	char	*cpy;
 
-	i = 0;
-	size_src = ft_strlen((char *)src);
-	cpy = malloc((size_src + 1) * sizeof(char));
-	if (cpy == 0)
-		return (0);
-	while (src[i])
-	{
-		cpy[i] = src[i];
-		i++;
-	}
-	cpy[i] = '\0';
-	return (cpy);
-}
+// 	i = 0;
+// 	size_src = ft_strlen((char *)src);
+// 	cpy = malloc((size_src + 1) * sizeof(char));
+// 	if (cpy == 0)
+// 		return (0);
+// 	while (src[i])
+// 	{
+// 		cpy[i] = src[i];
+// 		i++;
+// 	}
+// 	cpy[i] = '\0';
+// 	return (cpy);
+// }
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
