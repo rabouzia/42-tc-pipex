@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 10:45:25 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/09 17:04:07 by rabouzia         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:06:52 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
-typedef struct s_cmd
-{
-	int		fd_in;
-	int		fd_out;
-	int		id;
-	char	*cmd;
-}			t_cmd;
 
 typedef struct s_pipe
 {
@@ -44,8 +36,6 @@ typedef struct s_pipe
 }			t_pipe;
 
 //---------------- pipexu --------------------
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putendl_fd(char *s, int fd);
 void		excute(char **cmd, char **env);
 void		error_msg(char *path, char **cmd);
 
@@ -63,7 +53,6 @@ char		*ft_strjoin(char *s1, char *s2);
 int			ft_strlen(char *str);
 char		*ft_substr(char *s, int start, int len);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
-// char		*ft_strdup(const char *src);
 char		*empty(void);
 char		*get_next_word(char *str, int *ptr, char c);
 int			count_words(char *str, char c);
@@ -71,5 +60,7 @@ int			ft_strlcpy(char *dst, char *src, int size);
 void		warp_pipe(char **av, char **env);
 int			ft_strchr(char *str, char c);
 char		*ft_strdup(char *src);
+void		ft_putstr_fd(char *s, int fd);
+void		ft_putendl_fd(char *s, int fd);
 
 #endif

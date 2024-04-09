@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 19:17:30 by ramzerk           #+#    #+#             */
-/*   Updated: 2024/04/09 16:58:30 by rabouzia         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:07:18 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,6 @@ void	free_split(char **split)
 	}
 	free(split);
 }
-// char	*ft_strchr(const char *s, int c)
-// {
-// 	char	*str;
-
-// 	str = (char *)s;
-// 	while (*str != c)
-// 	{
-// 		if (*str == '\0')
-// 		{
-// 			return (NULL);
-// 		}
-// 		str++;
-// 	}
-// 	return (str);
-// }
 
 void	error_msg(char *path, char **cmd)
 {
